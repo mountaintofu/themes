@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+	@font-face {
+	    font-family: '0xProto';
+	    src: url('0xProto-Regular.woff2') format('woff2'),
+	         url('0xProto-Regular.woff') format('woff');
+	    font-weight: 400;
+	    font-style: normal;
+	}
+        :root {
+            --bg-overlay: rgba(0, 0, 0, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: '0xProto', system-ui, 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            background-color: #333;
+            /* Default background */
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* Dark overlay for readability */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-overlay);
+            z-index: -1;
+        }
+
+        /* Main Container */
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* Clock */
+        #clock {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Weather Badge */
+        #weather {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass-bg);
+            padding: 8px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Search Box */
+        .search-box {
+            width: 100%;
+            position: relative;
+        }
+
+        .search-box input {
+	    width: 100%;
+	    padding: 15px 25px;
+	    border-radius: 30px;
+	    border: 1px solid rgba(255,255,255,0.2);
+	    outline: none;
+	    font-size: 1.1rem;
+
+	    /* DARK MODE STYLE */
+	    background: rgba(0, 0, 0, 0.4);
+	    backdrop-filter: blur(8px);
+	    color: #fff;
+
+	    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+	    transition: transform 0.2s, background 0.3s;
+	    box-sizing: border-box;
+}
+
+.search-box input:focus {
+    transform: scale(1.02);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+
+        /* Settings Button */
+        .settings-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .settings-btn:hover { color: #fff; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; w-100; h-100;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: #222;
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            text-align: left;
+            border: 1px solid #444;
+        }
+
+        .modal h3 { margin-top: 0; border-bottom: 1px solid #444; padding-bottom: 10px;}
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #aaa; }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #333;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-save:hover { background: #0056b3; }
+        .btn-close {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            color: #aaa;
+            border: 1px solid #444;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Clock -->
+        <div id="clock">00:00</div>
+        
+        <!-- Weather -->
+        <div id="weather">Loading weather...</div>
+
+        <!-- Search Bar -->
+        <form class="search-box" id="searchForm">
+	    <input
+	        type="text"
+	        id="searchInput"
+	        placeholder="Search the Web or enter a URL"
+	        autofocus
+	        autocomplete="off"
+	        spellcheck="false"
+	    >
+	</form>
+
+
+    </div>
+
+    <!-- Settings Button -->
+    <button class="settings-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h3>Settings</h3>
+            
+            <div class="form-group">
+                <label>City Name (e.g., New York, London)</label>
+                <input type="text" id="cityInput" placeholder="Enter city name">
+            </div>
+
+            <div class="form-group">
+                <label>Background Image URL</label>
+                <input type="text" id="bgInput" placeholder="https://...">
+            </div>
+
+            <button class="btn-save" onclick="saveSettings()">Save & Apply</button>
+            <button class="btn-close" onclick="toggleSettings()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIG ---
+        const defaultCity = "Ho Chi Minh City";
+        const defaultBg = "/home/ren/Pictures/wallpapers/tokyonight.kanagawa-wave.jpg";
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            updateClock();
+            setInterval(updateClock, 1000);
+            getWeather();
+        });
+
+        // --- CLOCK ---
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}`;
+        }
+
+        // --- SETTINGS & STORAGE ---
+        function loadSettings() {
+            const savedBg = localStorage.getItem('startpage_bg') || defaultBg;
+            const savedCity = localStorage.getItem('startpage_city') || defaultCity;
+
+            document.body.style.backgroundImage = `url('${savedBg}')`;
+            document.getElementById('bgInput').value = savedBg;
+            document.getElementById('cityInput').value = savedCity;
+        }
+
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function saveSettings() {
+            const newBg = document.getElementById('bgInput').value;
+            const newCity = document.getElementById('cityInput').value;
+
+            localStorage.setItem('startpage_bg', newBg);
+            localStorage.setItem('startpage_city', newCity);
+
+            loadSettings(); 
+            getWeather();   
+            toggleSettings(); 
+        }
+
+        // --- WEATHER LOGIC ---
+        async function getWeather() {
+            const city = localStorage.getItem('startpage_city') || defaultCity;
+            const weatherEl = document.getElementById('weather');
+            weatherEl.textContent = `Searching for ${city}...`;
+
+            try {
+                // 1. Get Coords
+                const geoResponse = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`);
+                const geoData = await geoResponse.json();
+
+                if (!geoData.results || geoData.results.length === 0) {
+                    weatherEl.textContent = "City not found";
+                    return;
+                }
+
+                const lat = geoData.results[0].latitude;
+                const lon = geoData.results[0].longitude;
+                const cityName = geoData.results[0].name;
+
+                // 2. Get Weather
+                const weatherResponse = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+                const weatherData = await weatherResponse.json();
+                
+                const temp = Math.round(weatherData.current_weather.temperature);
+                const code = weatherData.current_weather.weathercode;
+                
+                const condition = getWeatherCondition(code);
+
+                weatherEl.innerHTML = `📍 ${cityName}: <b>${temp}°C</b> - ${condition}`;
+
+            } catch (error) {
+                console.error(error);
+                weatherEl.textContent = "Weather Error";
+            }
+        }
+
+        function getWeatherCondition(code) {
+            // WMO Weather interpretation codes (WW)
+            if (code === 0) return "☀️ Clear sky";
+            if (code >= 1 && code <= 3) return "☁️ Cloudy";
+            if (code >= 45 && code <= 48) return "🌫️ Fog";
+            if (code >= 51 && code <= 67) return "🌧️ Drizzle/Rain";
+            if (code >= 71 && code <= 77) return "🌨️ Snow";
+            if (code >= 80 && code <= 82) return "🌧️ Showers";
+            if (code >= 95) return "⚡ Thunderstorm";
+            return "🌥️";
+        }
+    </script>
+
+	<script>
+	const form = document.getElementById("searchForm");
+	const input = document.getElementById("searchInput");
+	
+	form.addEventListener("submit", (e) => {
+	    e.preventDefault();
+	    const text = input.value.trim();
+	
+	    // --- Detect if the input is a URL ---
+	    if (looksLikeURL(text)) {
+	        let url = text;
+	
+	        // If user typed "example.com" without a scheme → add https://
+	        if (!/^https?:\/\//i.test(url)) {
+	            url = "https://" + url;
+	        }
+	
+	        window.location.href = url;   // Navigate directly
+	        return;
+	    }
+	
+	    // --- Otherwise, search via DuckDuckGo ---
+	    window.location.href = "https://duckduckgo.com/?q=" + encodeURIComponent(text);
+	});
+	
+	function looksLikeURL(str) {
+	    // Basic Firefox-like URL detection
+	    return (
+	        /^[a-zA-Z]+:\/\//.test(str) ||            // has scheme (http://, file://, ftp://)
+	        /^[^\s]+\.[^\s]{2,}$/.test(str) ||        // domain.tld
+	        /^localhost(:\d+)?(\/.*)?$/.test(str) ||  // localhost
+	        /^\d{1,3}(\.\d{1,3}){3}(:\d+)?$/.test(str) // IPv4
+	    );
+	}
+	</script>
+
+</body>
+</html>
