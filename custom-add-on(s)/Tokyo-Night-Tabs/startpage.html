@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+
+    <style>
+        @font-face {
+            font-family: '0xProto';
+            src: url('0xProto-Regular.woff2') format('woff2'),
+                 url('0xProto-Regular.woff') format('woff');
+        }
+
+        :root {
+            --bg-overlay: rgba(0,0,0,0.4);
+            --glass-bg: rgba(255,255,255,0.1);
+            --glass-border: rgba(255,255,255,0.2);
+            --text-color: #fff;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: '0xProto', system-ui, sans-serif;
+            color: var(--text-color);
+            background: #333 center/cover no-repeat;
+            transition: background-image 0.4s ease-in-out;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--bg-overlay);
+            z-index: -1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #clock {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        #weather {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass-bg);
+            padding: 10px 22px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 23px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            outline: none;
+        }
+
+        .settings-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.6rem;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .modal-content {
+            background: #222;
+            padding: 25px;
+            border-radius: 12px;
+            width: 300px;
+            border: 1px solid #444;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { color: #aaa; margin-bottom: 5px; display: block; }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #333;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        .btn-save, .btn-close {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-save { background: #007bff; color: #fff; border: none; }
+        .btn-save:hover { background: #0060d1; }
+
+        .btn-close { background: transparent; color: #aaa; margin-top: 8px; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div id="clock">00:00</div>
+    <div id="weather">Loading weather…</div>
+
+    <form id="searchForm" class="search-box">
+        <input type="text" id="searchInput" placeholder="Search the web or enter a URL" autofocus>
+    </form>
+
+</div>
+
+<button class="settings-btn" onclick="toggleSettings()">⚙️</button>
+
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <h3>Settings</h3>
+
+        <div class="form-group">
+            <label>City Name</label>
+            <input id="cityInput" type="text">
+        </div>
+
+        <div class="form-group">
+            <label>Background Image URL</label>
+            <input id="bgInput" type="text">
+        </div>
+
+        <button class="btn-save" onclick="saveSettings()">Save</button>
+        <button class="btn-close" onclick="toggleSettings()">Close</button>
+    </div>
+</div>
+
+<script src="startpage.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "tt",
+  "version": "1.0",
+  "description": "Tokyo Night Tab.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "an-ordinary-nguyen@proton.me",
+      "strict_min_version": "128.0",
+      "data_collection_permissions":{"none":true, "required":["none"]}
+    }
+  },
+
+  "chrome_url_overrides": {
+    "newtab": "startpage.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://geocoding-api.open-meteo.com/*",
+    "https://api.open-meteo.com/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; img-src 'self' https: data: blob:;"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "*.png",
+        "*.jpg",
+        "*.jpeg",
+        "*.webp"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "icons": {
+    "48": "icon-48.png",
+    "96": "icon-96.png"
+  }
+}
