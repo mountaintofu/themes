@@ -12,9 +12,9 @@ INFO="<txt>"
 
 if [ "$WINDOW_TITLE" == "Xfwm4" ]; then
   INFO+=$(echo "$(whoami)@$(hostname)")
-elif [ ${#WINDOW_TITLE} -gt 100 ]; then #limit the length of the title
+elif [ ${#WINDOW_TITLE} -gt 50 ]; then #limit the length of the title
   # Trim the title and add ellipsis
-  INFO+="${WINDOW_TITLE:0:100}..."
+  INFO+="${WINDOW_TITLE:0:50}..."
 else
   INFO+="${WINDOW_TITLE}"
 fi
